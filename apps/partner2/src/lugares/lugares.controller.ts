@@ -11,41 +11,44 @@ import { SpotsService } from '@app/core/spots/spots.service';
 import { CriarLugarRequest } from './request/criar-lugar.request';
 import { AtualizarLugarRequest } from './request/atualizar-lugar.request';
 
-@Controller('eventos/:eventId/lugares')
+@Controller('eventos/:eventoId/lugares')
 export class LugaresController {
   constructor(private readonly spotsService: SpotsService) {}
 
   @Post()
   create(
-    @Param('eventId') eventId: string,
     @Body() criarLugarRequest: CriarLugarRequest,
+    @Param('eventoId') eventoId: string,
   ) {
-    return this.spotsService.create({ eventId, name: criarLugarRequest.nome });
+    return this.spotsService.create({
+      name: criarLugarRequest.nome,
+      eventId: eventoId,
+    });
   }
 
   @Get()
-  findAll(@Param('eventId') eventId: string) {
-    return this.spotsService.findAll(eventId);
+  findAll(@Param('eventoId') eventoId: string) {
+    return this.spotsService.findAll(eventoId);
   }
 
-  @Get(':spotId')
-  findOne(@Param('eventId') eventId: string, @Param('spotId') spotId: string) {
-    return this.spotsService.findOne(eventId, spotId);
+  @Get(':lugarId')
+  findOne(@Param('id') lugarId: string, @Param('eventoId') eventoId: string) {
+    return this.spotsService.findOne(eventoId, lugarId);
   }
 
-  @Patch(':spotId')
+  @Patch(':lugarId')
   update(
-    @Param('eventId') eventId: string,
-    @Param('spotId') spotId: string,
+    @Param('id') lugarId: string,
+    @Param('eventoId') eventoId: string,
     @Body() atualizarLugarRequest: AtualizarLugarRequest,
   ) {
-    return this.spotsService.update(eventId, spotId, {
+    return this.spotsService.update(eventoId, lugarId, {
       name: atualizarLugarRequest.nome,
     });
   }
 
-  @Delete(':spotId')
-  remove(@Param('eventId') eventId: string, @Param('spotId') spotId: string) {
-    return this.spotsService.remove(eventId, spotId);
+  @Delete(':lugarId')
+  remove(@Param('id') lugarId: string, @Param('eventoId') eventoId: string) {
+    return this.spotsService.remove(eventoId, lugarId);
   }
 }
